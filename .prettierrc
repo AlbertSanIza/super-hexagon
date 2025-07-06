@@ -4,6 +4,6 @@
     "semi": false,
     "singleQuote": true,
     "tabWidth": 4,
-    "tailwindStylesheet": "./app/globals.css",
+    "tailwindStylesheet": "./src/index.css",
     "trailingComma": "none"
 }
