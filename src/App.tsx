@@ -1,7 +1,7 @@
 import { useRef } from 'react'
 
-import type { IRefPhaserGame } from '@/PhaserGame'
-import { PhaserGame } from '@/PhaserGame'
+import type { IRefPhaserGame } from '@/Phaser'
+import { PhaserGame } from '@/Phaser'
 
 export default function App() {
     const phaserRef = useRef<IRefPhaserGame | null>(null)
