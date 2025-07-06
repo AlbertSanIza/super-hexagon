@@ -2,7 +2,7 @@
   "lockfileVersion": 1,
   "workspaces": {
     "": {
-      "name": "template-react-ts",
+      "name": "super-hexagon",
       "dependencies": {
         "phaser": "^3.90.0",
         "react": "^19.0.0",
