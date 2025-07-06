@@ -63,7 +63,6 @@ export class Game extends Scene {
     }
 
     update(time: number, delta: number) {
-        console.log(`Update called at time: ${time}, delta: ${delta}`)
         this.score += delta / 1000
         this.scoreText.setText(`Score: ${Math.floor(this.score)}`)
 

@@ -13,7 +13,7 @@ const config: Types.Core.GameConfig = {
     parent: 'game-container',
     backgroundColor: '#d6d3d1',
     scene: [Menu, MainGame],
-    physics: { default: 'arcade', arcade: { debug: true } }
+    physics: { default: 'arcade', arcade: { debug: false } }
 }
 
 const StartGame = (parent: string) => {
