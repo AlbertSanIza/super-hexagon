@@ -13,13 +13,6 @@
         "url": "https://github.com/phaserjs/template-react-ts/issues"
     },
     "homepage": "https://github.com/phaserjs/template-react-ts#readme",
-    "keywords": [
-        "phaser",
-        "phaser3",
-        "react",
-        "vite",
-        "typescript"
-    ],
     "scripts": {
         "dev": "node log.js dev & vite --config vite/config.dev.mjs",
         "build": "node log.js build & vite build --config vite/config.prod.mjs",
