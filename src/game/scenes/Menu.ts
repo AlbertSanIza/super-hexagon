@@ -1,6 +1,6 @@
 import { Scene } from 'phaser'
 
-export class Menu extends Scene {
+export class MenuScene extends Scene {
     constructor() {
         super('Menu')
     }
