@@ -1,0 +1,29 @@
+{
+    "cSpell.language": "en",
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": "explicit",
+        "source.organizeImports": "explicit"
+    },
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true,
+    "editor.guides.bracketPairs": "active",
+    "editor.linkedEditing": true,
+    "editor.quickSuggestions": {
+        "strings": "on"
+    },
+    "files.associations": {
+        "*.css": "tailwindcss"
+    },
+    "git.autofetch": true,
+    "git.confirmSync": false,
+    "github.copilot.enable": {
+        "*": true,
+        "markdown": true,
+        "plaintext": true,
+        "scminput": false
+    },
+    "github.copilot.nextEditSuggestions.enabled": true,
+    "tailwindCSS.classFunctions": ["clsx", "cn", "cva", "twMerge"],
+    "tailwindCSS.experimental.configFile": "src/index.css",
+    "workbench.iconTheme": "material-icon-theme"
+}
