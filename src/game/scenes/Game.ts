@@ -61,7 +61,7 @@ export class Game extends Scene {
         this.keyM = this.input.keyboard!.addKey('M')
     }
 
-    update(time: number, delta: number) {
+    update(_time: number, delta: number) {
         this.score += delta / 1000
         this.scoreText.setText(`Score: ${Math.floor(this.score)}`)
 
