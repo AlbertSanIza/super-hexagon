@@ -18,10 +18,9 @@ export class Game extends Scene {
 
     create() {
         this.center = new Phaser.Geom.Point(this.scale.width / 2, this.scale.height / 2)
-
         const hexagon = this.add.graphics()
-        hexagon.fillStyle(0x000000)
-        hexagon.fillPoints(
+        hexagon.lineStyle(4, 0xffffff) // White border with 4px thickness
+        hexagon.strokePoints(
             new Phaser.Geom.Polygon([
                 new Phaser.Geom.Point(this.center.x, this.center.y - 90),
                 new Phaser.Geom.Point(this.center.x + 78, this.center.y - 45),
