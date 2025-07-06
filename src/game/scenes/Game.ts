@@ -66,9 +66,9 @@ export class Game extends Scene {
         this.scoreText.setText(`Score: ${Math.floor(this.score)}`)
 
         if (this.cursors.left.isDown || this.keyZ.isDown) {
-            this.playerAngle -= 0.05
+            this.playerAngle -= 0.2
         } else if (this.cursors.right.isDown || this.keyM.isDown) {
-            this.playerAngle += 0.05
+            this.playerAngle += 0.2
         }
 
         this.updatePlayerPosition()
