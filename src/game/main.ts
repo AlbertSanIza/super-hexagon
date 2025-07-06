@@ -2,7 +2,7 @@ import type { Types } from 'phaser'
 import { AUTO, Game } from 'phaser'
 
 import { Game as MainGame } from '@/game/scenes/Game'
-import { MenuScene } from '@/game/scenes/Menu'
+import { Menu } from '@/game/scenes/Menu'
 
 // Find out more information about the Game Config at:
 // https://docs.phaser.io/api-documentation/typedef/types-core#gameconfig
@@ -12,7 +12,7 @@ const config: Types.Core.GameConfig = {
     height: 768,
     parent: 'game-container',
     backgroundColor: '#d6d3d1',
-    scene: [MenuScene, MainGame],
+    scene: [Menu, MainGame],
     physics: { default: 'arcade', arcade: { debug: false } }
 }
 
