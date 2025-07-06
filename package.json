@@ -28,5 +28,8 @@
         "vite": "^6.3.1",
         "terser": "^5.28.1"
         "globals": "^16.2.0",
+        "lucide-react": "^0.525.0",
+        "prettier": "^3.6.2",
+        "prettier-plugin-tailwindcss": "^0.6.13",
     }
 }
