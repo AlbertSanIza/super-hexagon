@@ -64,21 +64,17 @@ export class Game extends Scene {
     update(_time: number, delta: number) {
         this.score += delta / 1000
         this.scoreText.setText(`Score: ${Math.floor(this.score)}`)
-
         if (this.cursors.left.isDown || this.keyZ.isDown) {
             this.playerAngle -= 0.3
         } else if (this.cursors.right.isDown || this.keyM.isDown) {
             this.playerAngle += 0.3
         }
-
         this.updatePlayerPosition()
-
         this.walls.getChildren().forEach((wall) => {
             const wallSprite = wall as Phaser.GameObjects.Sprite
             wallSprite.scaleX -= 0.005
             wallSprite.scaleY -= 0.005
             wallSprite.rotation += 0.01
-
             if (wallSprite.scaleX < 0.1) {
                 this.walls.remove(wall, true, true)
             }
