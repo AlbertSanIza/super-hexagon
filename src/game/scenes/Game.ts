@@ -64,10 +64,11 @@ export class Game extends Scene {
         this.score += delta / 1000
         this.scoreText.setText(`Score: ${Math.floor(this.score)}`)
         if (this.cursors.left.isDown || this.keyZ.isDown) {
-            this.playerAngle -= 0.3
+            this.playerAngle -= 0.2
         } else if (this.cursors.right.isDown || this.keyM.isDown) {
-            this.playerAngle += 0.3
+            this.playerAngle += 0.2
         }
+        this.playerAngle = ((this.playerAngle % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2)
         this.updatePlayerPosition()
         this.walls.getChildren().forEach((wall) => {
             const wallSprite = wall as Phaser.GameObjects.Sprite
@@ -97,15 +98,12 @@ export class Game extends Scene {
             if (i === gapIndex) {
                 continue
             }
-
             const angle = (i / sides) * Math.PI * 2
             const wall = this.add.rectangle(this.center.x, this.center.y, wallLength, wallThickness, 0x00ff00)
             this.physics.add.existing(wall, true)
-
             wall.x = this.center.x + initialDistance * Math.cos(angle)
             wall.y = this.center.y + initialDistance * Math.sin(angle)
             wall.rotation = angle + Math.PI / 2
-
             this.walls.add(wall)
         }
     }
