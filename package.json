@@ -1,5 +1,6 @@
 {
     "name": "super-hexagon",
+    "private": true,
     "version": "0.1.0",
     "scripts": {
         "dev": "node log.js dev & vite --config vite/config.dev.mjs",
