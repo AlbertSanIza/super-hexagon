@@ -10,7 +10,7 @@ export class Game extends Scene {
     private keyZ!: Phaser.Input.Keyboard.Key
     private keyM!: Phaser.Input.Keyboard.Key
     private playerAngle = 0
-    private playerDistance = 120
+    private playerDistance = 50
 
     constructor() {
         super('Game')
@@ -66,9 +66,9 @@ export class Game extends Scene {
         this.scoreText.setText(`Score: ${Math.floor(this.score)}`)
 
         if (this.cursors.left.isDown || this.keyZ.isDown) {
-            this.playerAngle -= 0.2
+            this.playerAngle -= 0.3
         } else if (this.cursors.right.isDown || this.keyM.isDown) {
-            this.playerAngle += 0.2
+            this.playerAngle += 0.3
         }
 
         this.updatePlayerPosition()
