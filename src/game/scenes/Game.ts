@@ -1,10 +1,11 @@
 import { Scene } from 'phaser'
 
 export class Game extends Scene {
-    private player!: Phaser.GameObjects.Triangle
-    private center!: Phaser.Geom.Point
-    private walls!: Phaser.GameObjects.Group
     private score = 0
+    private center!: Phaser.Geom.Point
+    private player!: Phaser.GameObjects.Triangle
+
+    private walls!: Phaser.GameObjects.Group
     private scoreText!: Phaser.GameObjects.Text
     private cursors!: Phaser.Types.Input.Keyboard.CursorKeys
     private keyZ!: Phaser.Input.Keyboard.Key
@@ -18,9 +19,10 @@ export class Game extends Scene {
 
     create() {
         this.center = new Phaser.Geom.Point(this.scale.width / 2, this.scale.height / 2)
-        const hexagon = this.add.graphics()
-        hexagon.lineStyle(4, 0xffffff) // White border with 4px thickness
-        hexagon.strokePoints(
+        this.player = this.add.triangle(0, 0, 8, 0, -4, -6, -4, 6, 0xffffff).setOrigin(0, 0)
+        const centerHexagon = this.add.graphics()
+        centerHexagon.lineStyle(4, 0xffffff)
+        centerHexagon.strokePoints(
             new Phaser.Geom.Polygon([
                 new Phaser.Geom.Point(this.center.x, this.center.y - 40),
                 new Phaser.Geom.Point(this.center.x + 35, this.center.y - 20),
@@ -32,10 +34,7 @@ export class Game extends Scene {
             true
         )
 
-        this.player = this.add.triangle(0, 0, 0, 0, 10, 10, 5, -5, 0xffffff).setOrigin(0.5, 1)
-
         this.updatePlayerPosition()
-
         this.walls = this.add.group()
 
         this.time.addEvent({
@@ -84,7 +83,7 @@ export class Game extends Scene {
     private updatePlayerPosition() {
         this.player.x = this.center.x + this.playerDistance * Math.cos(this.playerAngle)
         this.player.y = this.center.y + this.playerDistance * Math.sin(this.playerAngle)
-        this.player.rotation = Phaser.Math.Angle.Between(this.player.x, this.player.y, this.center.x, this.center.y) + Math.PI / 2
+        this.player.rotation = this.playerAngle
     }
 
     private spawnWalls() {
