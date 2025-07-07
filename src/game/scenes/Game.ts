@@ -4,6 +4,7 @@ export class Game extends Scene {
     private center!: Phaser.Geom.Point
     private worldContainer!: Phaser.GameObjects.Container
     private player!: Phaser.GameObjects.Triangle
+    private centerHexagon!: Phaser.GameObjects.Graphics
     private playerAngle = 0
     private playerDistance = 52
     private scoreText!: Phaser.GameObjects.Text
@@ -52,22 +53,22 @@ export class Game extends Scene {
         this.player = this.add.triangle(0, 0, 8, 0, -4, -8, -4, 8, 0xba301e).setOrigin(0, 0)
         this.worldContainer.add(this.player)
 
-        const centerHexagon = this.add.graphics()
-        centerHexagon.lineStyle(4, 0xba301e)
-        centerHexagon.beginPath()
+        this.centerHexagon = this.add.graphics()
+        this.centerHexagon.lineStyle(4, 0xba301e)
+        this.centerHexagon.beginPath()
         for (let i = 0; i < 6; i++) {
             const angle = Phaser.Math.DegToRad(60 * i)
             const x = hexagonRadius * Math.cos(angle)
             const y = hexagonRadius * Math.sin(angle)
             if (i === 0) {
-                centerHexagon.moveTo(x, y)
+                this.centerHexagon.moveTo(x, y)
             } else {
-                centerHexagon.lineTo(x, y)
+                this.centerHexagon.lineTo(x, y)
             }
         }
-        centerHexagon.closePath()
-        centerHexagon.strokePath()
-        this.worldContainer.add(centerHexagon)
+        this.centerHexagon.closePath()
+        this.centerHexagon.strokePath()
+        this.worldContainer.add(this.centerHexagon)
 
         this.walls = this.add.group()
         this.time.addEvent({
@@ -87,7 +88,7 @@ export class Game extends Scene {
         this.keyM = this.input.keyboard!.addKey('M')
     }
 
-    update(_time: number, delta: number) {
+    update(time: number, delta: number) {
         this.score += delta / 1000
         this.scoreText.setText(`Score: ${Math.floor(this.score)}`)
         this.worldContainer.rotation += 0.01
@@ -100,6 +101,9 @@ export class Game extends Scene {
         this.player.x = this.playerDistance * Math.cos(this.playerAngle)
         this.player.y = this.playerDistance * Math.sin(this.playerAngle)
         this.player.rotation = this.playerAngle
+
+        const scale = 1 + 0.2 * Math.sin(time * 0.001)
+        this.centerHexagon.setScale(scale)
 
         this.walls.getChildren().forEach((wall) => {
             const wallRect = wall as Phaser.GameObjects.Rectangle
