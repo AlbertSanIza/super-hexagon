@@ -100,11 +100,12 @@ export class Game extends Scene {
             this.playerAngle += 0.1
         }
         this.playerAngle = ((this.playerAngle % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2)
-        this.player.x = this.playerDistance * Math.cos(this.playerAngle)
-        this.player.y = this.playerDistance * Math.sin(this.playerAngle)
-        this.player.rotation = this.playerAngle
 
-        const scale = 1 + 0.2 * Math.sin(time * 0.001)
+        const scale = 1 + 0.04 * Math.sin(time * 0.014)
+        const scaledPlayerDistance = this.playerDistance * scale
+        this.player.x = scaledPlayerDistance * Math.cos(this.playerAngle)
+        this.player.y = scaledPlayerDistance * Math.sin(this.playerAngle)
+        this.player.rotation = this.playerAngle
         this.centerHexagon.setScale(scale)
 
         this.walls.getChildren().forEach((wall) => {
