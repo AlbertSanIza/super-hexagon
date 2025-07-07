@@ -25,15 +25,22 @@ export class Game extends Scene {
         this.player = this.add.triangle(0, 0, 8, 0, -4, -8, -4, 8, 0xffffff).setOrigin(0, 0)
         this.worldContainer.add(this.player)
 
-        const hexRadius = 50
-        const hexPoints: Phaser.Geom.Point[] = []
+        const hexRadius = 40
+        const centerHexagon = this.add.graphics()
+        centerHexagon.lineStyle(4, 0xffffff)
+        centerHexagon.beginPath()
         for (let i = 0; i < 6; i++) {
             const angle = Phaser.Math.DegToRad(60 * i)
-            hexPoints.push(new Phaser.Geom.Point(hexRadius * Math.cos(angle), hexRadius * Math.sin(angle)))
+            const x = hexRadius * Math.cos(angle)
+            const y = hexRadius * Math.sin(angle)
+            if (i === 0) {
+                centerHexagon.moveTo(x, y)
+            } else {
+                centerHexagon.lineTo(x, y)
+            }
         }
-        const centerHexagon = this.add.graphics()
-        centerHexagon.lineStyle(6, 0xffffff)
-        centerHexagon.strokePoints(hexPoints, true)
+        centerHexagon.closePath()
+        centerHexagon.strokePath()
         this.worldContainer.add(centerHexagon)
 
         this.walls = this.add.group()
