@@ -73,14 +73,7 @@ export class Game extends Scene {
         this.worldContainer.add(this.centerHexagon)
 
         this.walls = this.add.group()
-        this.time.addEvent({
-            delay: 2000,
-            callback: this.spawnWalls,
-            callbackScope: this,
-            loop: true
-        })
-
-        // Collider: use worldContainer for player, walls are still managed as a group
+        this.time.addEvent({ delay: 1000, loop: true, callbackScope: this, callback: this.spawnWalls })
         this.physics.add.collider(this.player, this.walls, () => this.scene.start('Menu'))
 
         const scoreBackgroundWidth = 160
@@ -90,18 +83,8 @@ export class Game extends Scene {
         scoreBackground.fillRect(this.scale.width - scoreBackgroundWidth, 0, scoreBackgroundWidth, scoreBackgroundHeight)
         scoreBackground.setScrollFactor(0)
 
-        this.add.text(this.scale.width - 220, 6, 'TIME', {
-            fontSize: '22px',
-            fontStyle: 'bold',
-            fontFamily: 'monospace',
-            padding: { left: 0, right: 0, top: 0, bottom: 0 }
-        })
-        this.scoreText = this.add.text(this.scale.width - 140, 6, '0.00', {
-            fontSize: '36px',
-            fontStyle: 'bold',
-            fontFamily: 'monospace',
-            padding: { left: 0, right: 0, top: 0, bottom: 0 }
-        })
+        this.add.text(this.scale.width - 220, 6, 'TIME', { fontSize: '22px', fontStyle: 'bold', fontFamily: 'monospace' })
+        this.scoreText = this.add.text(this.scale.width - 140, 6, '0.00', { fontSize: '36px', fontStyle: 'bold', fontFamily: 'monospace' })
 
         this.cursors = this.input.keyboard!.createCursorKeys()
         this.keyZ = this.input.keyboard!.addKey('Z')
