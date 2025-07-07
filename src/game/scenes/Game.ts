@@ -26,12 +26,12 @@ export class Game extends Scene {
         centerHexagon.lineStyle(4, 0xffffff)
         centerHexagon.strokePoints(
             new Phaser.Geom.Polygon([
-                new Phaser.Geom.Point(this.center.x, this.center.y - 40),
-                new Phaser.Geom.Point(this.center.x + 35, this.center.y - 20),
-                new Phaser.Geom.Point(this.center.x + 35, this.center.y + 20),
-                new Phaser.Geom.Point(this.center.x, this.center.y + 40),
-                new Phaser.Geom.Point(this.center.x - 35, this.center.y + 20),
-                new Phaser.Geom.Point(this.center.x - 35, this.center.y - 20)
+                new Phaser.Geom.Point(0, -40),
+                new Phaser.Geom.Point(35, -20),
+                new Phaser.Geom.Point(35, 20),
+                new Phaser.Geom.Point(0, 40),
+                new Phaser.Geom.Point(-35, 20),
+                new Phaser.Geom.Point(-35, -20)
             ]).points,
             true
         )
