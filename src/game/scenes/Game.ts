@@ -6,14 +6,14 @@ export class Game extends Scene {
     private worldAngle = 0
     private player!: Phaser.GameObjects.Triangle
     private playerAngle = 0
+    private playerDistance = 52
+    private score = 0
 
     private walls!: Phaser.GameObjects.Group
     private scoreText!: Phaser.GameObjects.Text
     private cursors!: Phaser.Types.Input.Keyboard.CursorKeys
     private keyZ!: Phaser.Input.Keyboard.Key
     private keyM!: Phaser.Input.Keyboard.Key
-    private playerDistance = 50
-    private score = 0
 
     constructor() {
         super('Game')
