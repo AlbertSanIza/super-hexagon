@@ -72,12 +72,12 @@ export class Game extends Scene {
         this.player.x = this.playerDistance * Math.cos(this.playerAngle)
         this.player.y = this.playerDistance * Math.sin(this.playerAngle)
         this.player.rotation = this.playerAngle
+
         this.walls.getChildren().forEach((wall) => {
-            const wallSprite = wall as Phaser.GameObjects.Sprite
-            wallSprite.scaleX -= 0.005
-            wallSprite.scaleY -= 0.005
-            wallSprite.rotation += 0.01
-            if (wallSprite.scaleX < 0.1) {
+            const wallRect = wall as Phaser.GameObjects.Rectangle
+            wallRect.scaleX -= 0.005
+            wallRect.scaleY -= 0.005
+            if (wallRect.scaleX < 0.1) {
                 this.walls.remove(wall, true, true)
             }
         })
@@ -95,11 +95,12 @@ export class Game extends Scene {
                 continue
             }
             const angle = (i / sides) * Math.PI * 2
-            const wall = this.add.rectangle(this.center.x, this.center.y, wallLength, wallThickness, 0x00ff00)
+            const wall = this.add.rectangle(0, 0, wallLength, wallThickness, 0x00ff00)
             this.physics.add.existing(wall, true)
-            wall.x = this.center.x + initialDistance * Math.cos(angle)
-            wall.y = this.center.y + initialDistance * Math.sin(angle)
+            wall.x = initialDistance * Math.cos(angle)
+            wall.y = initialDistance * Math.sin(angle)
             wall.rotation = angle + Math.PI / 2
+            this.worldContainer.add(wall)
             this.walls.add(wall)
         }
     }
