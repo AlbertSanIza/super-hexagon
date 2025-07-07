@@ -22,10 +22,37 @@ export class Game extends Scene {
         this.center = new Phaser.Geom.Point(this.scale.width / 2, this.scale.height / 2)
         this.worldContainer = this.add.container(this.center.x, this.center.y)
 
+        const hexagonRadius = 40
+        const outerRadius = 800
+        for (let i = 0; i < 6; i++) {
+            if (i % 2 === 0) {
+                const g = this.add.graphics()
+                g.fillStyle(0x3a7e80, 1)
+                g.beginPath()
+                const angle1 = Phaser.Math.DegToRad(60 * i)
+                const angle2 = Phaser.Math.DegToRad(60 * (i + 1))
+                const x1 = hexagonRadius * Math.cos(angle1)
+                const y1 = hexagonRadius * Math.sin(angle1)
+                const x2 = hexagonRadius * Math.cos(angle2)
+                const y2 = hexagonRadius * Math.sin(angle2)
+                // Outer points
+                const x3 = outerRadius * Math.cos(angle1)
+                const y3 = outerRadius * Math.sin(angle1)
+                const x4 = outerRadius * Math.cos(angle2)
+                const y4 = outerRadius * Math.sin(angle2)
+                g.moveTo(x1, y1)
+                g.lineTo(x2, y2)
+                g.lineTo(x4, y4)
+                g.lineTo(x3, y3)
+                g.closePath()
+                g.fillPath()
+                this.worldContainer.add(g)
+            }
+        }
+
         this.player = this.add.triangle(0, 0, 8, 0, -4, -8, -4, 8, 0xffffff).setOrigin(0, 0)
         this.worldContainer.add(this.player)
 
-        const hexagonRadius = 40
         const centerHexagon = this.add.graphics()
         centerHexagon.lineStyle(4, 0xffffff)
         centerHexagon.beginPath()
