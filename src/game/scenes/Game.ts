@@ -13,6 +13,7 @@ export class Game extends Scene {
     private keyZ!: Phaser.Input.Keyboard.Key
     private keyM!: Phaser.Input.Keyboard.Key
     private playerDistance = 50
+    private score = 0
 
     constructor() {
         super('Game')
