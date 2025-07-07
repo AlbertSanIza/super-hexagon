@@ -93,9 +93,9 @@ export class Game extends Scene {
         this.scoreText.setText(`Score: ${Math.floor(this.score)}`)
         this.worldContainer.rotation += 0.01
         if (this.cursors.left.isDown || this.keyZ.isDown) {
-            this.playerAngle -= 0.14
+            this.playerAngle -= 0.1
         } else if (this.cursors.right.isDown || this.keyM.isDown) {
-            this.playerAngle += 0.14
+            this.playerAngle += 0.1
         }
         this.playerAngle = ((this.playerAngle % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2)
         this.player.x = this.playerDistance * Math.cos(this.playerAngle)
