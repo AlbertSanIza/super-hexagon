@@ -21,7 +21,11 @@ export class Game extends Scene {
 
     create() {
         this.center = new Phaser.Geom.Point(this.scale.width / 2, this.scale.height / 2)
-        this.player = this.add.triangle(0, 0, 8, 0, -4, -6, -4, 6, 0xffffff).setOrigin(0, 0)
+        this.worldContainer = this.add.container(this.center.x, this.center.y)
+
+        this.player = this.add.triangle(0, 0, 8, 0, -4, -8, -4, 8, 0xffffff).setOrigin(0, 0)
+        this.worldContainer.add(this.player)
+
         const centerHexagon = this.add.graphics()
         centerHexagon.lineStyle(4, 0xffffff)
         centerHexagon.strokePoints(
@@ -35,6 +39,7 @@ export class Game extends Scene {
             ]).points,
             true
         )
+        this.worldContainer.add(centerHexagon)
 
         this.updatePlayerPosition()
         this.walls = this.add.group()
