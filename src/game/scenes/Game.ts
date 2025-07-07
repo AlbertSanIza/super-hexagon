@@ -83,8 +83,26 @@ export class Game extends Scene {
         // Collider: use worldContainer for player, walls are still managed as a group
         this.physics.add.collider(this.player, this.walls, () => this.scene.start('Menu'))
 
-        // Score text stays on the main scene, not in the container
-        this.scoreText = this.add.text(this.center.x, 20, 'Score: 0', { fontSize: '32px', color: '#fff' }).setOrigin(0.5, 0)
+        const scoreBackgroundWidth = 160
+        const scoreBackgroundHeight = 52
+        const scoreBackground = this.add.graphics()
+        scoreBackground.fillStyle(0x000000)
+        scoreBackground.fillRect(this.scale.width - scoreBackgroundWidth, 0, scoreBackgroundWidth, scoreBackgroundHeight)
+        scoreBackground.setScrollFactor(0)
+
+        this.add.text(this.scale.width - 220, 6, 'TIME', {
+            fontSize: '22px',
+            fontStyle: 'bold',
+            fontFamily: 'monospace',
+            padding: { left: 0, right: 0, top: 0, bottom: 0 }
+        })
+        this.scoreText = this.add.text(this.scale.width - 140, 6, '0.00', {
+            fontSize: '36px',
+            fontStyle: 'bold',
+            fontFamily: 'monospace',
+            padding: { left: 0, right: 0, top: 0, bottom: 0 }
+        })
+
         this.cursors = this.input.keyboard!.createCursorKeys()
         this.keyZ = this.input.keyboard!.addKey('Z')
         this.keyM = this.input.keyboard!.addKey('M')
@@ -92,7 +110,8 @@ export class Game extends Scene {
 
     update(time: number, delta: number) {
         this.score += delta / 1000
-        this.scoreText.setText(`Score: ${Math.floor(this.score)}`)
+        const [integerScore, decimalScore] = this.score.toFixed(2).split('.')
+        this.scoreText.setText(`${integerScore}:${decimalScore.padStart(2, '0')}    `)
         this.worldContainer.rotation += 0.01
         if (this.cursors.left.isDown || this.keyZ.isDown) {
             this.playerAngle -= 0.1
