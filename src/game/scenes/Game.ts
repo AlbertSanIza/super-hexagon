@@ -25,14 +25,14 @@ export class Game extends Scene {
         this.player = this.add.triangle(0, 0, 8, 0, -4, -8, -4, 8, 0xffffff).setOrigin(0, 0)
         this.worldContainer.add(this.player)
 
-        const hexRadius = 40
+        const hexagonRadius = 40
         const centerHexagon = this.add.graphics()
         centerHexagon.lineStyle(4, 0xffffff)
         centerHexagon.beginPath()
         for (let i = 0; i < 6; i++) {
             const angle = Phaser.Math.DegToRad(60 * i)
-            const x = hexRadius * Math.cos(angle)
-            const y = hexRadius * Math.sin(angle)
+            const x = hexagonRadius * Math.cos(angle)
+            const y = hexagonRadius * Math.sin(angle)
             if (i === 0) {
                 centerHexagon.moveTo(x, y)
             } else {
