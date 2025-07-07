@@ -32,7 +32,7 @@ export class Game extends Scene {
             hexPoints.push(new Phaser.Geom.Point(hexRadius * Math.cos(angle), hexRadius * Math.sin(angle)))
         }
         const centerHexagon = this.add.graphics()
-        centerHexagon.lineStyle(10, 0xffffff)
+        centerHexagon.lineStyle(6, 0xffffff)
         centerHexagon.strokePoints(hexPoints, true)
         this.worldContainer.add(centerHexagon)
 
