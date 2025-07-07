@@ -55,6 +55,7 @@ export class Game extends Scene {
 
         this.centerHexagon = this.add.graphics()
         this.centerHexagon.lineStyle(4, 0xba301e)
+        this.centerHexagon.fillStyle(0x682207)
         this.centerHexagon.beginPath()
         for (let i = 0; i < 6; i++) {
             const angle = Phaser.Math.DegToRad(60 * i)
@@ -67,6 +68,7 @@ export class Game extends Scene {
             }
         }
         this.centerHexagon.closePath()
+        this.centerHexagon.fillPath()
         this.centerHexagon.strokePath()
         this.worldContainer.add(this.centerHexagon)
 
