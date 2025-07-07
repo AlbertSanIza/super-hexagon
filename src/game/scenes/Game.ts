@@ -35,7 +35,6 @@ export class Game extends Scene {
                 const y1 = hexagonRadius * Math.sin(angle1)
                 const x2 = hexagonRadius * Math.cos(angle2)
                 const y2 = hexagonRadius * Math.sin(angle2)
-                // Outer points
                 const x3 = outerRadius * Math.cos(angle1)
                 const y3 = outerRadius * Math.sin(angle1)
                 const x4 = outerRadius * Math.cos(angle2)
