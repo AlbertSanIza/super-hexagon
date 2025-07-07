@@ -50,7 +50,11 @@ export class Game extends Scene {
             callbackScope: this,
             loop: true
         })
+
+        // Collider: use worldContainer for player, walls are still managed as a group
         this.physics.add.collider(this.player, this.walls, () => this.scene.start('Menu'))
+
+        // Score text stays on the main scene, not in the container
         this.scoreText = this.add.text(this.center.x, 20, 'Score: 0', { fontSize: '32px', color: '#fff' }).setOrigin(0.5, 0)
         this.cursors = this.input.keyboard!.createCursorKeys()
         this.keyZ = this.input.keyboard!.addKey('Z')
