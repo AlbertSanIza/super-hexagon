@@ -3,7 +3,6 @@ import { Scene } from 'phaser'
 export class Game extends Scene {
     private center!: Phaser.Geom.Point
     private worldContainer!: Phaser.GameObjects.Container
-    private worldAngle = 0
     private player!: Phaser.GameObjects.Triangle
     private playerAngle = 0
     private playerDistance = 52
@@ -64,6 +63,7 @@ export class Game extends Scene {
     update(_time: number, delta: number) {
         this.score += delta / 1000
         this.scoreText.setText(`Score: ${Math.floor(this.score)}`)
+        this.worldContainer.rotation += 0.01
         // Player controls (move left/right)
         if (this.cursors.left.isDown || this.keyZ.isDown) {
             this.playerAngle -= 0.14
