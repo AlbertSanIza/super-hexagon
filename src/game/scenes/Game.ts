@@ -3,10 +3,9 @@ import { Scene } from 'phaser'
 export class Game extends Scene {
     private center!: Phaser.Geom.Point
     private worldContainer!: Phaser.GameObjects.Container
-    private player!: Phaser.GameObjects.Triangle
-
-    private playerAngle = 0
     private worldAngle = 0
+    private player!: Phaser.GameObjects.Triangle
+    private playerAngle = 0
 
     private walls!: Phaser.GameObjects.Group
     private scoreText!: Phaser.GameObjects.Text
