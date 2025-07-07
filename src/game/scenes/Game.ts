@@ -94,7 +94,7 @@ export class Game extends Scene {
     update(time: number, delta: number) {
         this.score += delta / 1000
         const [integerScore, decimalScore] = this.score.toFixed(2).split('.')
-        this.scoreText.setText(`${integerScore}:${decimalScore.padStart(2, '0')}    `)
+        this.scoreText.setText(`${integerScore}:${decimalScore.padStart(2, '0')}`)
         this.worldContainer.rotation += 0.01
         if (this.cursors.left.isDown || this.keyZ.isDown) {
             this.playerAngle -= 0.1
