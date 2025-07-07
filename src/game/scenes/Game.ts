@@ -27,7 +27,7 @@ export class Game extends Scene {
         for (let i = 0; i < 6; i++) {
             if (i % 2 === 0) {
                 const g = this.add.graphics()
-                g.fillStyle(0x3a7e80, 1)
+                g.fillStyle(0x481907, 1)
                 g.beginPath()
                 const angle1 = Phaser.Math.DegToRad(60 * i)
                 const angle2 = Phaser.Math.DegToRad(60 * (i + 1))
@@ -50,11 +50,11 @@ export class Game extends Scene {
             }
         }
 
-        this.player = this.add.triangle(0, 0, 8, 0, -4, -8, -4, 8, 0xffffff).setOrigin(0, 0)
+        this.player = this.add.triangle(0, 0, 8, 0, -4, -8, -4, 8, 0xba301e).setOrigin(0, 0)
         this.worldContainer.add(this.player)
 
         const centerHexagon = this.add.graphics()
-        centerHexagon.lineStyle(4, 0xffffff)
+        centerHexagon.lineStyle(4, 0xba301e)
         centerHexagon.beginPath()
         for (let i = 0; i < 6; i++) {
             const angle = Phaser.Math.DegToRad(60 * i)

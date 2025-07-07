@@ -7,7 +7,7 @@ export default function App() {
     const phaserRef = useRef<IRefPhaserGame | null>(null)
 
     return (
-        <div className="fixed inset-0 flex items-center justify-center bg-[#0ABAB5]">
+        <div className="fixed inset-0 flex items-center justify-center bg-neutral-900">
             <PhaserGame ref={phaserRef} />
         </div>
     )
