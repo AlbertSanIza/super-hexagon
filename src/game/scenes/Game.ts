@@ -44,7 +44,6 @@ export class Game extends Scene {
         this.worldContainer.add(centerHexagon)
 
         this.walls = this.add.group()
-
         this.time.addEvent({
             delay: 2000,
             callback: this.spawnWalls,
