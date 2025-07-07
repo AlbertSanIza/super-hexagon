@@ -50,5 +50,5 @@ export const PhaserGame = forwardRef<IRefPhaserGame, IProps>(function PhaserGame
         }
     }, [currentActiveScene, ref])
 
-    return <div id="game-container" />
+    return <div id="game-container" className="overflow-hidden rounded-2xl border-4 border-white" />
 })
