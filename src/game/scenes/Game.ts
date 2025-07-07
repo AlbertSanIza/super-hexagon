@@ -4,13 +4,13 @@ export class Game extends Scene {
     private score = 0
     private center!: Phaser.Geom.Point
     private player!: Phaser.GameObjects.Triangle
+    private playerAngle = 0
 
     private walls!: Phaser.GameObjects.Group
     private scoreText!: Phaser.GameObjects.Text
     private cursors!: Phaser.Types.Input.Keyboard.CursorKeys
     private keyZ!: Phaser.Input.Keyboard.Key
     private keyM!: Phaser.Input.Keyboard.Key
-    private playerAngle = 0
     private playerDistance = 50
 
     constructor() {
