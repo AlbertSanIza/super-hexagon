@@ -43,18 +43,8 @@ export class Game extends Scene {
             callbackScope: this,
             loop: true
         })
-
-        this.physics.add.collider(this.player, this.walls, () => {
-            this.scene.start('Menu')
-        })
-
-        this.scoreText = this.add
-            .text(this.center.x, 20, 'Score: 0', {
-                fontSize: '32px',
-                color: '#fff'
-            })
-            .setOrigin(0.5, 0)
-
+        this.physics.add.collider(this.player, this.walls, () => this.scene.start('Menu'))
+        this.scoreText = this.add.text(this.center.x, 20, 'Score: 0', { fontSize: '32px', color: '#fff' }).setOrigin(0.5, 0)
         this.cursors = this.input.keyboard!.createCursorKeys()
         this.keyZ = this.input.keyboard!.addKey('Z')
         this.keyM = this.input.keyboard!.addKey('M')
