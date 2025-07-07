@@ -40,7 +40,6 @@ export class Game extends Scene {
         )
         this.worldContainer.add(centerHexagon)
 
-        this.updatePlayerPosition()
         this.walls = this.add.group()
 
         this.time.addEvent({
@@ -64,14 +63,15 @@ export class Game extends Scene {
         this.score += delta / 1000
         this.scoreText.setText(`Score: ${Math.floor(this.score)}`)
         this.worldContainer.rotation += 0.01
-        // Player controls (move left/right)
         if (this.cursors.left.isDown || this.keyZ.isDown) {
             this.playerAngle -= 0.14
         } else if (this.cursors.right.isDown || this.keyM.isDown) {
             this.playerAngle += 0.14
         }
         this.playerAngle = ((this.playerAngle % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2)
-        this.updatePlayerPosition()
+        this.player.x = this.playerDistance * Math.cos(this.playerAngle)
+        this.player.y = this.playerDistance * Math.sin(this.playerAngle)
+        this.player.rotation = this.playerAngle
         this.walls.getChildren().forEach((wall) => {
             const wallSprite = wall as Phaser.GameObjects.Sprite
             wallSprite.scaleX -= 0.005
@@ -81,12 +81,6 @@ export class Game extends Scene {
                 this.walls.remove(wall, true, true)
             }
         })
-    }
-
-    private updatePlayerPosition() {
-        this.player.x = this.center.x + this.playerDistance * Math.cos(this.playerAngle)
-        this.player.y = this.center.y + this.playerDistance * Math.sin(this.playerAngle)
-        this.player.rotation = this.playerAngle
     }
 
     private spawnWalls() {
