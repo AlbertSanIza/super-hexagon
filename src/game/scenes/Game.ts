@@ -121,24 +121,34 @@ export class Game extends Scene {
     }
 
     private spawnWalls() {
-        const sides = 6
-        const wallLength = 200
-        const wallThickness = 20
-        const initialDistance = 500
+        const sides = Phaser.Math.Between(4, 6)
+        const initialDistance = 800
         const gapIndex = Phaser.Math.Between(0, sides - 1)
 
+        const wallThickness = 30
         for (let i = 0; i < sides; i++) {
             if (i === gapIndex) {
                 continue
             }
-            const angle = (i / sides) * Math.PI * 2
-            const wall = this.add.rectangle(0, 0, wallLength, wallThickness, 0x00ff00)
-            this.physics.add.existing(wall, true)
-            wall.x = initialDistance * Math.cos(angle)
-            wall.y = initialDistance * Math.sin(angle)
-            wall.rotation = angle + Math.PI / 2
+            const angle1 = (i / sides) * Math.PI * 2
+            const angle2 = ((i + 1) / sides) * Math.PI * 2
+            const wall = this.add.graphics() as Phaser.GameObjects.Graphics & { angle1: number; angle2: number; outerRadius: number; innerRadius: number }
+            wall.angle1 = angle1
+            wall.angle2 = angle2
+            wall.outerRadius = initialDistance
+            wall.innerRadius = initialDistance - wallThickness
+            wall.clear()
+            wall.fillStyle(0x00ff00, 1)
+            wall.beginPath()
+            wall.moveTo(wall.outerRadius * Math.cos(angle1), wall.outerRadius * Math.sin(angle1))
+            wall.lineTo(wall.outerRadius * Math.cos(angle2), wall.outerRadius * Math.sin(angle2))
+            wall.lineTo(wall.innerRadius * Math.cos(angle2), wall.innerRadius * Math.sin(angle2))
+            wall.lineTo(wall.innerRadius * Math.cos(angle1), wall.innerRadius * Math.sin(angle1))
+            wall.closePath()
+            wall.fillPath()
             this.worldContainer.add(wall)
             this.walls.add(wall)
         }
+        this.worldContainer.bringToTop(this.centerHexagon)
     }
 }
