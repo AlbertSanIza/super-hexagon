@@ -121,7 +121,7 @@ export class Game extends Scene {
     }
 
     private spawnWalls() {
-        const sides = Phaser.Math.Between(4, 6)
+        const sides = 6
         const initialDistance = 800
         const gapIndex = Phaser.Math.Between(0, sides - 1)
 
@@ -138,14 +138,7 @@ export class Game extends Scene {
             wall.outerRadius = initialDistance
             wall.innerRadius = initialDistance - wallThickness
             wall.clear()
-            wall.fillStyle(0x00ff00, 1)
             wall.beginPath()
-            wall.moveTo(wall.outerRadius * Math.cos(angle1), wall.outerRadius * Math.sin(angle1))
-            wall.lineTo(wall.outerRadius * Math.cos(angle2), wall.outerRadius * Math.sin(angle2))
-            wall.lineTo(wall.innerRadius * Math.cos(angle2), wall.innerRadius * Math.sin(angle2))
-            wall.lineTo(wall.innerRadius * Math.cos(angle1), wall.innerRadius * Math.sin(angle1))
-            wall.closePath()
-            wall.fillPath()
             this.worldContainer.add(wall)
             this.walls.add(wall)
         }
