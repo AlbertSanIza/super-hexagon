@@ -97,8 +97,10 @@ export class Game extends Scene {
         this.scoreText.setText(`${integerScore}:${decimalScore.padStart(2, '0')}`)
         this.worldContainer.rotation += 0.01
         if (this.cursors.left.isDown || this.keyZ.isDown) {
+
+        if ((this.cursors.left.isDown || this.keyZ.isDown) && !blockLeft) {
             this.playerAngle -= 0.1
-        } else if (this.cursors.right.isDown || this.keyM.isDown) {
+        } else if ((this.cursors.right.isDown || this.keyM.isDown) && !blockRight) {
             this.playerAngle += 0.1
         }
 
