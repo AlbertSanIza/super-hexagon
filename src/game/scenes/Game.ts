@@ -103,25 +103,47 @@ export class Game extends Scene {
         const tipX = this.playerDistance * Math.cos(this.playerAngle)
         const tipY = this.playerDistance * Math.sin(this.playerAngle)
 
+        // Group walls by groupId and use first wall to control distance
+        const wallGroups = new Map<
+            number,
+            (Phaser.GameObjects.Graphics & { angle1: number; angle2: number; outerRadius: number; innerRadius: number; groupId: number })[]
+        >()
         this.walls.getChildren().forEach((wall) => {
-            const wallPoly = wall as Phaser.GameObjects.Graphics & { angle1: number; angle2: number; outerRadius: number; innerRadius: number }
-            wallPoly.outerRadius -= moveSpeed
-            wallPoly.innerRadius -= moveSpeed
-            wallPoly.clear()
-            wallPoly.fillStyle(0xf64813, 1)
-            wallPoly.beginPath()
-            wallPoly.moveTo(wallPoly.outerRadius * Math.cos(wallPoly.angle1), wallPoly.outerRadius * Math.sin(wallPoly.angle1))
-            wallPoly.lineTo(wallPoly.outerRadius * Math.cos(wallPoly.angle2), wallPoly.outerRadius * Math.sin(wallPoly.angle2))
-            wallPoly.lineTo(wallPoly.innerRadius * Math.cos(wallPoly.angle2), wallPoly.innerRadius * Math.sin(wallPoly.angle2))
-            wallPoly.lineTo(wallPoly.innerRadius * Math.cos(wallPoly.angle1), wallPoly.innerRadius * Math.sin(wallPoly.angle1))
-            wallPoly.closePath()
-            wallPoly.fillPath()
-            if (wallPoly.outerRadius < hexRadius + 2) {
-                this.walls.remove(wall, true, true)
+            const wallPoly = wall as Phaser.GameObjects.Graphics & { angle1: number; angle2: number; outerRadius: number; innerRadius: number; groupId: number }
+            if (!wallGroups.has(wallPoly.groupId)) {
+                wallGroups.set(wallPoly.groupId, [])
             }
-            if (this.pointInWall(tipX, tipY, wallPoly.angle1, wallPoly.angle2, wallPoly.innerRadius, wallPoly.outerRadius)) {
-                hit = true
-            }
+            wallGroups.get(wallPoly.groupId)!.push(wallPoly)
+        })
+
+        // Update walls by group
+        wallGroups.forEach((groupWalls) => {
+            if (groupWalls.length === 0) return
+            // Use first wall as reference for the group
+            const refWall = groupWalls[0]
+            refWall.outerRadius -= moveSpeed
+            refWall.innerRadius -= moveSpeed
+
+            // Sync all other walls in group to reference wall
+            groupWalls.forEach((wallPoly) => {
+                wallPoly.outerRadius = refWall.outerRadius
+                wallPoly.innerRadius = refWall.innerRadius
+                wallPoly.clear()
+                wallPoly.fillStyle(0xf64813, 1)
+                wallPoly.beginPath()
+                wallPoly.moveTo(wallPoly.outerRadius * Math.cos(wallPoly.angle1), wallPoly.outerRadius * Math.sin(wallPoly.angle1))
+                wallPoly.lineTo(wallPoly.outerRadius * Math.cos(wallPoly.angle2), wallPoly.outerRadius * Math.sin(wallPoly.angle2))
+                wallPoly.lineTo(wallPoly.innerRadius * Math.cos(wallPoly.angle2), wallPoly.innerRadius * Math.sin(wallPoly.angle2))
+                wallPoly.lineTo(wallPoly.innerRadius * Math.cos(wallPoly.angle1), wallPoly.innerRadius * Math.sin(wallPoly.angle1))
+                wallPoly.closePath()
+                wallPoly.fillPath()
+                if (wallPoly.outerRadius < hexRadius + 2) {
+                    this.walls.remove(wallPoly, true, true)
+                }
+                if (this.pointInWall(tipX, tipY, wallPoly.angle1, wallPoly.angle2, wallPoly.innerRadius, wallPoly.outerRadius)) {
+                    hit = true
+                }
+            })
         })
 
         if (this.cursors.left.isDown || this.keyZ.isDown) {
