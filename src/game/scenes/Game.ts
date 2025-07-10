@@ -92,15 +92,41 @@ export class Game extends Scene {
     }
 
     update(time: number, delta: number) {
+        let hit = false
+        const moveSpeed = 3
+        const hexRadius = 40
         this.score += delta / 1000
         const [integerScore, decimalScore] = this.score.toFixed(2).split('.')
         this.scoreText.setText(`${integerScore}:${decimalScore.padStart(2, '0')}`)
-        this.worldContainer.rotation += 0.01
-        if (this.cursors.left.isDown || this.keyZ.isDown) {
+        this.worldContainer.rotation += 0.009
 
-        if ((this.cursors.left.isDown || this.keyZ.isDown) && !blockLeft) {
+        const tipX = this.playerDistance * Math.cos(this.playerAngle)
+        const tipY = this.playerDistance * Math.sin(this.playerAngle)
+
+        this.walls.getChildren().forEach((wall) => {
+            const wallPoly = wall as Phaser.GameObjects.Graphics & { angle1: number; angle2: number; outerRadius: number; innerRadius: number }
+            wallPoly.outerRadius -= moveSpeed
+            wallPoly.innerRadius -= moveSpeed
+            wallPoly.clear()
+            wallPoly.fillStyle(0xf64813, 1)
+            wallPoly.beginPath()
+            wallPoly.moveTo(wallPoly.outerRadius * Math.cos(wallPoly.angle1), wallPoly.outerRadius * Math.sin(wallPoly.angle1))
+            wallPoly.lineTo(wallPoly.outerRadius * Math.cos(wallPoly.angle2), wallPoly.outerRadius * Math.sin(wallPoly.angle2))
+            wallPoly.lineTo(wallPoly.innerRadius * Math.cos(wallPoly.angle2), wallPoly.innerRadius * Math.sin(wallPoly.angle2))
+            wallPoly.lineTo(wallPoly.innerRadius * Math.cos(wallPoly.angle1), wallPoly.innerRadius * Math.sin(wallPoly.angle1))
+            wallPoly.closePath()
+            wallPoly.fillPath()
+            if (wallPoly.outerRadius < hexRadius + 2) {
+                this.walls.remove(wall, true, true)
+            }
+            if (this.pointInWall(tipX, tipY, wallPoly.angle1, wallPoly.angle2, wallPoly.innerRadius, wallPoly.outerRadius)) {
+                hit = true
+            }
+        })
+
+        if (this.cursors.left.isDown || this.keyZ.isDown) {
             this.playerAngle -= 0.1
-        } else if ((this.cursors.right.isDown || this.keyM.isDown) && !blockRight) {
+        } else if (this.cursors.right.isDown || this.keyM.isDown) {
             this.playerAngle += 0.1
         }
 
