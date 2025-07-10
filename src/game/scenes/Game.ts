@@ -144,18 +144,26 @@ export class Game extends Scene {
 
     private spawnWalls() {
         const sides = 6
+        const wallThickness = 26
+        const groupId = Date.now()
         const initialDistance = 800
         const gapIndex = Phaser.Math.Between(0, sides - 1)
-        const wallThickness = 26
         for (let i = 0; i < sides; i++) {
             if (i === gapIndex) {
                 continue
             }
-            const wall = this.add.graphics() as Phaser.GameObjects.Graphics & { angle1: number; angle2: number; outerRadius: number; innerRadius: number }
+            const wall = this.add.graphics() as Phaser.GameObjects.Graphics & {
+                angle1: number
+                angle2: number
+                outerRadius: number
+                innerRadius: number
+                groupId: number
+            }
             wall.angle1 = (i / sides) * Math.PI * 2
             wall.angle2 = ((i + 1) / sides) * Math.PI * 2
             wall.outerRadius = initialDistance
             wall.innerRadius = initialDistance - wallThickness
+            wall.groupId = groupId
             this.worldContainer.add(wall)
             this.walls.add(wall)
         }
