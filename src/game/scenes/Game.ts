@@ -141,4 +141,21 @@ export class Game extends Scene {
         }
         this.worldContainer.bringToTop(this.centerHexagon)
     }
+
+    private pointInWall(px: number, py: number, angle1: number, angle2: number, innerRadius: number, outerRadius: number) {
+        const r = Math.sqrt(px * px + py * py)
+        let theta = Math.atan2(py, px)
+        if (theta < 0) {
+            theta += Math.PI * 2
+        }
+        const a1 = angle1
+        let a2 = angle2
+        if (a2 < a1) {
+            a2 += Math.PI * 2
+        }
+        if (theta < a1) {
+            theta += Math.PI * 2
+        }
+        return r > innerRadius && r < outerRadius && theta >= a1 && theta <= a2
+    }
 }
