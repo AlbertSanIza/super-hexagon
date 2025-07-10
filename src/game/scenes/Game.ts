@@ -6,7 +6,7 @@ export class Game extends Scene {
     private player!: Phaser.GameObjects.Triangle
     private centerHexagon!: Phaser.GameObjects.Graphics
     private playerAngle = 0
-    private playerDistance = 52
+    private playerDistance = 58
     private scoreText!: Phaser.GameObjects.Text
     private score = 0
 
@@ -50,7 +50,7 @@ export class Game extends Scene {
             }
         }
 
-        this.player = this.add.triangle(0, 0, 8, 0, -4, -8, -4, 8, 0xf64813).setOrigin(0, 0)
+        this.player = this.add.triangle(0, 0, 0, 0, -12, -8, -12, 8, 0xf64813).setOrigin(0, 0)
         this.worldContainer.add(this.player)
 
         this.centerHexagon = this.add.graphics()
@@ -93,17 +93,26 @@ export class Game extends Scene {
 
     update(time: number, delta: number) {
         let hit = false
-        const moveSpeed = 3
         const hexRadius = 40
+        const wallMoveSpeed = 3
         this.score += delta / 1000
         const [integerScore, decimalScore] = this.score.toFixed(2).split('.')
         this.scoreText.setText(`${integerScore}:${decimalScore.padStart(2, '0')}`)
         this.worldContainer.rotation += 0.009
 
-        const tipX = this.playerDistance * Math.cos(this.playerAngle)
-        const tipY = this.playerDistance * Math.sin(this.playerAngle)
+        if (this.cursors.left.isDown || this.keyZ.isDown) {
+            this.playerAngle -= 0.1
+        } else if (this.cursors.right.isDown || this.keyM.isDown) {
+            this.playerAngle += 0.1
+        }
 
-        // Group walls by groupId and use first wall to control distance
+        this.playerAngle = ((this.playerAngle % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2)
+        const scale = 1 + 0.05 * Math.sin(time * 0.014)
+        const scaledPlayerDistance = this.playerDistance * scale
+        this.player.x = scaledPlayerDistance * Math.cos(this.playerAngle)
+        this.player.y = scaledPlayerDistance * Math.sin(this.playerAngle)
+        this.player.rotation = this.playerAngle
+
         const wallGroups = new Map<
             number,
             (Phaser.GameObjects.Graphics & { angle1: number; angle2: number; outerRadius: number; innerRadius: number; groupId: number })[]
