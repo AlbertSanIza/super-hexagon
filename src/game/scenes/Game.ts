@@ -62,6 +62,7 @@ export class Game extends Scene {
         }
 
         this.player = this.add.triangle(0, 0, 0, 0, -12, -8, -12, 8, 0xf64813).setOrigin(0, 0)
+        this.player.setVisible(false)
         this.worldContainer.add(this.player)
 
         this.centerHexagon = this.add.graphics()
