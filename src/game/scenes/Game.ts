@@ -15,6 +15,10 @@ export class Game extends Scene {
     private keyZ!: Phaser.Input.Keyboard.Key
     private keyM!: Phaser.Input.Keyboard.Key
 
+    private wallGroups = new Map<
+        number,
+        (Phaser.GameObjects.Graphics & { angle1: number; angle2: number; outerRadius: number; innerRadius: number; groupId: number })[]
+    >()
     constructor() {
         super('Game')
     }
@@ -113,20 +117,17 @@ export class Game extends Scene {
         this.player.y = scaledPlayerDistance * Math.sin(this.playerAngle)
         this.player.rotation = this.playerAngle
 
-        const wallGroups = new Map<
-            number,
-            (Phaser.GameObjects.Graphics & { angle1: number; angle2: number; outerRadius: number; innerRadius: number; groupId: number })[]
-        >()
+        this.wallGroups.clear()
         this.walls.getChildren().forEach((wall) => {
             const wallPoly = wall as Phaser.GameObjects.Graphics & { angle1: number; angle2: number; outerRadius: number; innerRadius: number; groupId: number }
-            if (!wallGroups.has(wallPoly.groupId)) {
-                wallGroups.set(wallPoly.groupId, [])
+            if (!this.wallGroups.has(wallPoly.groupId)) {
+                this.wallGroups.set(wallPoly.groupId, [])
             }
-            wallGroups.get(wallPoly.groupId)!.push(wallPoly)
+            this.wallGroups.get(wallPoly.groupId)!.push(wallPoly)
         })
 
         // Update walls by group
-        wallGroups.forEach((groupWalls) => {
+        this.wallGroups.forEach((groupWalls) => {
             if (groupWalls.length === 0) {
                 return
             }
