@@ -127,11 +127,13 @@ export class Game extends Scene {
 
         // Update walls by group
         wallGroups.forEach((groupWalls) => {
-            if (groupWalls.length === 0) return
+            if (groupWalls.length === 0) {
+                return
+            }
             // Use first wall as reference for the group
             const refWall = groupWalls[0]
-            refWall.outerRadius -= moveSpeed
-            refWall.innerRadius -= moveSpeed
+            refWall.outerRadius -= wallMoveSpeed
+            refWall.innerRadius -= wallMoveSpeed
 
             // Sync all other walls in group to reference wall
             groupWalls.forEach((wallPoly) => {
@@ -149,24 +151,12 @@ export class Game extends Scene {
                 if (wallPoly.outerRadius < hexRadius + 2) {
                     this.walls.remove(wallPoly, true, true)
                 }
-                if (this.pointInWall(tipX, tipY, wallPoly.angle1, wallPoly.angle2, wallPoly.innerRadius, wallPoly.outerRadius)) {
+                if (this.pointInWall(this.player.x, this.player.y, wallPoly.angle1, wallPoly.angle2, wallPoly.innerRadius, wallPoly.outerRadius)) {
                     hit = true
                 }
             })
         })
 
-        if (this.cursors.left.isDown || this.keyZ.isDown) {
-            this.playerAngle -= 0.1
-        } else if (this.cursors.right.isDown || this.keyM.isDown) {
-            this.playerAngle += 0.1
-        }
-
-        this.playerAngle = ((this.playerAngle % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2)
-        const scale = 1 + 0.05 * Math.sin(time * 0.014)
-        const scaledPlayerDistance = this.playerDistance * scale
-        this.player.x = scaledPlayerDistance * Math.cos(this.playerAngle)
-        this.player.y = scaledPlayerDistance * Math.sin(this.playerAngle)
-        this.player.rotation = this.playerAngle
         this.centerHexagon.setScale(scale)
         if (hit) {
             this.scene.start('Menu')
