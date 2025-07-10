@@ -3,6 +3,7 @@ import { Scene } from 'phaser'
 export class Game extends Scene {
     private center!: Phaser.Geom.Point
     private worldContainer!: Phaser.GameObjects.Container
+    private perspectiveContainer!: Phaser.GameObjects.Container
     private player!: Phaser.GameObjects.Triangle
     private centerHexagon!: Phaser.GameObjects.Graphics
     private playerAngle = 0
@@ -21,6 +22,11 @@ export class Game extends Scene {
     >()
     private cosCache = new Map<number, number>()
     private sinCache = new Map<number, number>()
+
+    private gameState: 'menu' | 'playing' | 'transitioning' = 'menu'
+    private menuZoom = 5
+    private gameZoom = 1
+    private wallSpawnTimer?: Phaser.Time.TimerEvent
 
     constructor() {
         super('Game')
