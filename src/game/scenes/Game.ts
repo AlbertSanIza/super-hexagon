@@ -116,7 +116,7 @@ export class Game extends Scene {
         this.playerAngle = ((this.playerAngle % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2)
         const scale = 1 + 0.05 * Math.sin(time * 0.014)
         const scaledPlayerDistance = this.playerDistance * scale
-        this.player.x = scaledPlayerDistance * this.getCachedSin(this.playerAngle)
+        this.player.x = scaledPlayerDistance * this.getCachedCos(this.playerAngle)
         this.player.y = scaledPlayerDistance * this.getCachedSin(this.playerAngle)
         this.player.rotation = this.playerAngle
 
