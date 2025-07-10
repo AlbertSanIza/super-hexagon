@@ -111,15 +111,9 @@ export class Game extends Scene {
         this.player.y = scaledPlayerDistance * Math.sin(this.playerAngle)
         this.player.rotation = this.playerAngle
         this.centerHexagon.setScale(scale)
-
-        this.walls.getChildren().forEach((wall) => {
-            const wallRect = wall as Phaser.GameObjects.Rectangle
-            wallRect.scaleX -= 0.005
-            wallRect.scaleY -= 0.005
-            if (wallRect.scaleX < 0.1) {
-                this.walls.remove(wall, true, true)
-            }
-        })
+        if (hit) {
+            this.scene.start('Menu')
+        }
     }
 
     private spawnWalls() {
