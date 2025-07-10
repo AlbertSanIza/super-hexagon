@@ -101,9 +101,9 @@ export class Game extends Scene {
         } else if (this.cursors.right.isDown || this.keyM.isDown) {
             this.playerAngle += 0.1
         }
-        this.playerAngle = ((this.playerAngle % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2)
 
-        const scale = 1 + 0.04 * Math.sin(time * 0.014)
+        this.playerAngle = ((this.playerAngle % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2)
+        const scale = 1 + 0.05 * Math.sin(time * 0.014)
         const scaledPlayerDistance = this.playerDistance * scale
         this.player.x = scaledPlayerDistance * Math.cos(this.playerAngle)
         this.player.y = scaledPlayerDistance * Math.sin(this.playerAngle)
