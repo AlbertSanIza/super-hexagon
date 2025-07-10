@@ -28,7 +28,11 @@ export class Game extends Scene {
 
     create() {
         this.center = new Phaser.Geom.Point(this.scale.width / 2, this.scale.height / 2)
-        this.worldContainer = this.add.container(this.center.x, this.center.y)
+        this.perspectiveContainer = this.add.container(this.center.x, this.center.y)
+        this.worldContainer = this.add.container(0, 0)
+        this.perspectiveContainer.add(this.worldContainer)
+        this.cameras.main.setZoom(this.menuZoom)
+        this.perspectiveContainer.setScale(1, 0.8)
 
         const hexagonRadius = 40
         const outerRadius = 800
