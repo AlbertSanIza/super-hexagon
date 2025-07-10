@@ -19,6 +19,9 @@ export class Game extends Scene {
         number,
         (Phaser.GameObjects.Graphics & { angle1: number; angle2: number; outerRadius: number; innerRadius: number; groupId: number })[]
     >()
+    private cosCache = new Map<number, number>()
+    private sinCache = new Map<number, number>()
+
     constructor() {
         super('Game')
     }
@@ -113,8 +116,8 @@ export class Game extends Scene {
         this.playerAngle = ((this.playerAngle % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2)
         const scale = 1 + 0.05 * Math.sin(time * 0.014)
         const scaledPlayerDistance = this.playerDistance * scale
-        this.player.x = scaledPlayerDistance * Math.cos(this.playerAngle)
-        this.player.y = scaledPlayerDistance * Math.sin(this.playerAngle)
+        this.player.x = scaledPlayerDistance * this.getCachedSin(this.playerAngle)
+        this.player.y = scaledPlayerDistance * this.getCachedSin(this.playerAngle)
         this.player.rotation = this.playerAngle
 
         this.wallGroups.clear()
@@ -143,10 +146,10 @@ export class Game extends Scene {
                 wallPoly.clear()
                 wallPoly.fillStyle(0xf64813, 1)
                 wallPoly.beginPath()
-                wallPoly.moveTo(wallPoly.outerRadius * Math.cos(wallPoly.angle1), wallPoly.outerRadius * Math.sin(wallPoly.angle1))
-                wallPoly.lineTo(wallPoly.outerRadius * Math.cos(wallPoly.angle2), wallPoly.outerRadius * Math.sin(wallPoly.angle2))
-                wallPoly.lineTo(wallPoly.innerRadius * Math.cos(wallPoly.angle2), wallPoly.innerRadius * Math.sin(wallPoly.angle2))
-                wallPoly.lineTo(wallPoly.innerRadius * Math.cos(wallPoly.angle1), wallPoly.innerRadius * Math.sin(wallPoly.angle1))
+                wallPoly.moveTo(wallPoly.outerRadius * this.getCachedCos(wallPoly.angle1), wallPoly.outerRadius * this.getCachedSin(wallPoly.angle1))
+                wallPoly.lineTo(wallPoly.outerRadius * this.getCachedCos(wallPoly.angle2), wallPoly.outerRadius * this.getCachedSin(wallPoly.angle2))
+                wallPoly.lineTo(wallPoly.innerRadius * this.getCachedCos(wallPoly.angle2), wallPoly.innerRadius * this.getCachedSin(wallPoly.angle2))
+                wallPoly.lineTo(wallPoly.innerRadius * this.getCachedCos(wallPoly.angle1), wallPoly.innerRadius * this.getCachedSin(wallPoly.angle1))
                 wallPoly.closePath()
                 wallPoly.fillPath()
                 if (wallPoly.outerRadius < hexRadius + 2) {
@@ -207,5 +210,27 @@ export class Game extends Scene {
             theta += Math.PI * 2
         }
         return r > innerRadius && r < outerRadius && theta >= a1 && theta <= a2
+    }
+
+    private getCachedCos(angle: number): number {
+        const key = Math.round(angle * 1000)
+        if (!this.cosCache.has(key)) {
+            if (this.cosCache.size > 100) {
+                this.cosCache.clear()
+            }
+            this.cosCache.set(key, Math.cos(angle))
+        }
+        return this.cosCache.get(key)!
+    }
+
+    private getCachedSin(angle: number): number {
+        const key = Math.round(angle * 1000)
+        if (!this.sinCache.has(key)) {
+            if (this.sinCache.size > 100) {
+                this.sinCache.clear()
+            }
+            this.sinCache.set(key, Math.sin(angle))
+        }
+        return this.sinCache.get(key)!
     }
 }
