@@ -91,8 +91,7 @@ export class Game extends Scene {
         this.worldContainer.add(this.centerHexagon)
 
         this.walls = this.add.group()
-        this.time.addEvent({ delay: 1000, loop: true, callbackScope: this, callback: this.spawnWalls })
-        this.physics.add.collider(this.player, this.walls, () => this.scene.start('Menu'))
+        this.physics.add.collider(this.player, this.walls, () => this.gameOver())
 
         const scoreBackgroundWidth = 160
         const scoreBackgroundHeight = 52
