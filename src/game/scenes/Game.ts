@@ -100,9 +100,16 @@ export class Game extends Scene {
         scoreBackground.fillStyle(0x000000)
         scoreBackground.fillRect(this.scale.width - scoreBackgroundWidth, 0, scoreBackgroundWidth, scoreBackgroundHeight)
         scoreBackground.setScrollFactor(0)
+        scoreBackground.setVisible(false)
+        scoreBackground.setData('isScoreUI', true)
 
-        this.add.text(this.scale.width - 220, 6, 'TIME', { fontSize: '22px', fontStyle: 'bold', fontFamily: 'monospace' })
+        const timeLabel = this.add.text(this.scale.width - 220, 6, 'TIME', { fontSize: '22px', fontStyle: 'bold', fontFamily: 'monospace' })
+        timeLabel.setVisible(false)
+        timeLabel.setData('isScoreUI', true)
+
         this.scoreText = this.add.text(this.scale.width - 140, 6, '0.00', { fontSize: '36px', fontStyle: 'bold', fontFamily: 'monospace' })
+        this.scoreText.setVisible(false)
+        this.scoreText.setData('isScoreUI', true)
 
         this.cursors = this.input.keyboard!.createCursorKeys()
         this.keyZ = this.input.keyboard!.addKey('Z')
