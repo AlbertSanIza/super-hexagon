@@ -10,6 +10,12 @@ export class Game extends Scene {
     private playerDistance = 58
     private scoreText!: Phaser.GameObjects.Text
     private score = 0
+    private baseRotationSpeed = 0.009
+    private rotationDirection = 1
+    private timeSinceLastDirectionChange = 0
+    private nextDirectionChangeTime = Phaser.Math.Between(10, 20)
+    private baseSpawnDelay = 1000
+    private nextSpawnTime = 0
 
     private walls!: Phaser.GameObjects.Group
     private cursors!: Phaser.Types.Input.Keyboard.CursorKeys
@@ -26,7 +32,6 @@ export class Game extends Scene {
     private gameState: 'menu' | 'playing' | 'transitioning' = 'menu'
     private menuZoom = 5
     private gameZoom = 1
-    private wallSpawnTimer?: Phaser.Time.TimerEvent
 
     constructor() {
         super('Game')
@@ -119,7 +124,7 @@ export class Game extends Scene {
     }
 
     update(time: number, delta: number) {
-        this.worldContainer.rotation += 0.009
+        this.worldContainer.rotation += (this.baseRotationSpeed + this.score * 0.0001) * this.rotationDirection
         if (this.gameState === 'playing') {
             this.updateGameplay(time, delta)
         } else if (this.gameState === 'menu') {
@@ -129,9 +134,20 @@ export class Game extends Scene {
     }
 
     private updateGameplay(time: number, delta: number) {
+        this.timeSinceLastDirectionChange += delta / 1000
+        if (this.timeSinceLastDirectionChange >= this.nextDirectionChangeTime) {
+            this.rotationDirection *= -1
+            this.timeSinceLastDirectionChange = 0
+            this.nextDirectionChangeTime = Phaser.Math.Between(10, 20)
+        }
+        if (this.time.now >= this.nextSpawnTime) {
+            this.spawnWalls()
+            const currentDelay = this.baseSpawnDelay - this.score * 10
+            this.nextSpawnTime = this.time.now + Math.max(200, currentDelay)
+        }
         let hit = false
         const hexRadius = 40
-        const wallMoveSpeed = 3
+        const wallMoveSpeed = 3 + this.score * 0.02
         this.score += delta / 1000
         const [integerScore, decimalScore] = this.score.toFixed(2).split('.')
         this.scoreText.setText(`${integerScore}:${decimalScore.padStart(2, '0')}`)
@@ -206,7 +222,7 @@ export class Game extends Scene {
             targets: this.cameras.main,
             onComplete: () => {
                 this.gameState = 'playing'
-                this.wallSpawnTimer = this.time.addEvent({ delay: 1000, loop: true, callbackScope: this, callback: this.spawnWalls })
+                this.nextSpawnTime = this.time.now + this.baseSpawnDelay
                 this.player.setVisible(true)
                 this.player.setAlpha(0)
                 this.tweens.add({ targets: this.player, alpha: 1, duration: 300, ease: 'Power2.easeOut' })
@@ -228,10 +244,7 @@ export class Game extends Scene {
         this.gameState = 'transitioning'
         this.cameras.main.shake(80, 0.02)
         this.cameras.main.flash(10, 255, 255, 255, false)
-        if (this.wallSpawnTimer) {
-            this.wallSpawnTimer.destroy()
-            this.wallSpawnTimer = undefined
-        }
+
         this.scoreText.setVisible(false)
         this.children.getAll().forEach((child) => {
             const gameObject = child as Phaser.GameObjects.GameObject & {
