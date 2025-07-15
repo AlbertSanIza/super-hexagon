@@ -113,6 +113,9 @@ export class Game extends Scene {
         this.cursors = this.input.keyboard!.createCursorKeys()
         this.keyZ = this.input.keyboard!.addKey('Z')
         this.keyM = this.input.keyboard!.addKey('M')
+
+        this.scene.get('Menu').events.on('startGame', this.startGame, this)
+        this.scene.launch('Menu')
     }
 
     update(time: number, delta: number) {
