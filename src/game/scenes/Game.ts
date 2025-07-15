@@ -192,7 +192,7 @@ export class Game extends Scene {
 
         this.centerHexagon.setScale(scale)
         if (hit) {
-            this.scene.start('Menu')
+            this.gameOver()
         }
     }
 
