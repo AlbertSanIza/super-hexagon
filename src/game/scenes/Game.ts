@@ -119,13 +119,22 @@ export class Game extends Scene {
     }
 
     update(time: number, delta: number) {
+        this.worldContainer.rotation += 0.009
+        if (this.gameState === 'playing') {
+            this.updateGameplay(time, delta)
+        } else if (this.gameState === 'menu') {
+            const scale = 1 + 0.05 * Math.sin(time * 0.014)
+            this.centerHexagon.setScale(scale)
+        }
+    }
+
+    private updateGameplay(time: number, delta: number) {
         let hit = false
         const hexRadius = 40
         const wallMoveSpeed = 3
         this.score += delta / 1000
         const [integerScore, decimalScore] = this.score.toFixed(2).split('.')
         this.scoreText.setText(`${integerScore}:${decimalScore.padStart(2, '0')}`)
-        this.worldContainer.rotation += 0.009
 
         if (this.cursors.left.isDown || this.keyZ.isDown) {
             this.playerAngle -= 0.1
