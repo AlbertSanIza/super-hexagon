@@ -197,6 +197,33 @@ export class Game extends Scene {
     }
 
     private startGame() {
+        this.gameState = 'transitioning'
+
+        this.tweens.add({
+            duration: 800,
+            zoom: this.gameZoom,
+            ease: 'Power2.easeOut',
+            targets: this.cameras.main,
+            onComplete: () => {
+                this.gameState = 'playing'
+                this.wallSpawnTimer = this.time.addEvent({ delay: 1000, loop: true, callbackScope: this, callback: this.spawnWalls })
+                this.player.setVisible(true)
+                this.player.setAlpha(0)
+                this.tweens.add({ targets: this.player, alpha: 1, duration: 300, ease: 'Power2.easeOut' })
+                this.scoreText.setVisible(true)
+
+                this.children.getAll().forEach((child) => {
+                    const gameObject = child as Phaser.GameObjects.GameObject & { getData?: (key: string) => boolean; setVisible?: (visible: boolean) => void }
+                    if (gameObject.getData?.('isScoreUI') && gameObject.setVisible) {
+                        gameObject.setVisible(true)
+                    }
+                })
+
+                this.score = 0
+            }
+        })
+    }
+
     }
 
     private spawnWalls() {
