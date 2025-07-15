@@ -224,6 +224,39 @@ export class Game extends Scene {
         })
     }
 
+    private gameOver() {
+        this.gameState = 'transitioning'
+        this.cameras.main.shake(80, 0.02)
+        this.cameras.main.flash(10, 255, 255, 255, false)
+        if (this.wallSpawnTimer) {
+            this.wallSpawnTimer.destroy()
+            this.wallSpawnTimer = undefined
+        }
+        this.scoreText.setVisible(false)
+        this.children.getAll().forEach((child) => {
+            const gameObject = child as Phaser.GameObjects.GameObject & {
+                getData?: (key: string) => boolean
+                setVisible?: (visible: boolean) => void
+            }
+            if (gameObject.getData?.('isScoreUI') && gameObject.setVisible) {
+                gameObject.setVisible(false)
+            }
+        })
+        this.tweens.add({
+            duration: 1000,
+            zoom: this.menuZoom,
+            ease: 'Power2.easeIn',
+            targets: this.cameras.main,
+            onComplete: () => {
+                this.gameState = 'menu'
+                this.walls.clear(true, true)
+                this.player.setVisible(false)
+                if (!this.scene.isActive('Menu')) {
+                    this.scene.launch('Menu')
+                }
+            }
+        })
+        this.tweens.add({ targets: this.player, alpha: 0, duration: 500, ease: 'Power2.easeOut' })
     }
 
     private spawnWalls() {
