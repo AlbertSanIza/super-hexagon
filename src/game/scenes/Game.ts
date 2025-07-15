@@ -196,6 +196,9 @@ export class Game extends Scene {
         }
     }
 
+    private startGame() {
+    }
+
     private spawnWalls() {
         const sides = 6
         const wallThickness = 26
