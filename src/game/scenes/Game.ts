@@ -37,6 +37,8 @@ export class Game extends Scene {
     private cursors!: Phaser.Types.Input.Keyboard.CursorKeys
     private keyZ!: Phaser.Input.Keyboard.Key
     private keyM!: Phaser.Input.Keyboard.Key
+    private keyA!: Phaser.Input.Keyboard.Key
+    private keyD!: Phaser.Input.Keyboard.Key
 
     private wallGroups = new Map<number, Wall[]>()
     private cosCache = new Map<number, number>()
@@ -120,6 +122,8 @@ export class Game extends Scene {
         this.cursors = this.input.keyboard!.createCursorKeys()
         this.keyZ = this.input.keyboard!.addKey('Z')
         this.keyM = this.input.keyboard!.addKey('M')
+        this.keyA = this.input.keyboard!.addKey('A')
+        this.keyD = this.input.keyboard!.addKey('D')
 
         this.scene.get('Menu').events.on('startGame', this.startGame, this)
         this.scene.launch('Menu')
@@ -154,9 +158,9 @@ export class Game extends Scene {
         const [integerScore, decimalScore] = this.score.toFixed(2).split('.')
         this.scoreText.setText(`${integerScore}:${decimalScore.padStart(2, '0')}`)
 
-        if (this.cursors.left.isDown || this.keyZ.isDown) {
+        if (this.cursors.left.isDown || this.keyZ.isDown || this.keyA.isDown) {
             this.playerAngle -= 0.1
-        } else if (this.cursors.right.isDown || this.keyM.isDown) {
+        } else if (this.cursors.right.isDown || this.keyM.isDown || this.keyD.isDown) {
             this.playerAngle += 0.1
         }
 
