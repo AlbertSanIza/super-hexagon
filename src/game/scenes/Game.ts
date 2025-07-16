@@ -3,6 +3,15 @@ import { Scene } from 'phaser'
 const hexagonRadius = 40
 const outerRadius = 800
 
+interface Wall extends Phaser.GameObjects.Graphics {
+    angle1: number
+    angle2: number
+    outerRadius: number
+    innerRadius: number
+    groupId: number
+    wallSpeed: number
+}
+
 export class Game extends Scene {
     private center!: Phaser.Geom.Point
     private prevWallType: string | null = null
@@ -29,10 +38,7 @@ export class Game extends Scene {
     private keyZ!: Phaser.Input.Keyboard.Key
     private keyM!: Phaser.Input.Keyboard.Key
 
-    private wallGroups = new Map<
-        number,
-        (Phaser.GameObjects.Graphics & { angle1: number; angle2: number; outerRadius: number; innerRadius: number; groupId: number })[]
-    >()
+    private wallGroups = new Map<number, Wall[]>()
     private cosCache = new Map<number, number>()
     private sinCache = new Map<number, number>()
 
@@ -143,7 +149,7 @@ export class Game extends Scene {
         }
         let hit = false
         const hexRadius = 40
-        const wallMoveSpeed = 3 + this.score * 0.02
+
         this.score += delta / 1000
         const [integerScore, decimalScore] = this.score.toFixed(2).split('.')
         this.scoreText.setText(`${integerScore}:${decimalScore.padStart(2, '0')}`)
@@ -163,7 +169,7 @@ export class Game extends Scene {
 
         this.wallGroups.clear()
         this.walls.getChildren().forEach((wall) => {
-            const wallPoly = wall as Phaser.GameObjects.Graphics & { angle1: number; angle2: number; outerRadius: number; innerRadius: number; groupId: number }
+            const wallPoly = wall as Wall
             if (!this.wallGroups.has(wallPoly.groupId)) {
                 this.wallGroups.set(wallPoly.groupId, [])
             }
@@ -175,6 +181,7 @@ export class Game extends Scene {
                 return
             }
             const refWall = groupWalls[0]
+            const wallMoveSpeed = Math.max(3 + this.score * groupWalls[0].wallSpeed, 4)
             refWall.outerRadius -= wallMoveSpeed
             refWall.innerRadius -= wallMoveSpeed
             groupWalls.forEach((wallPoly) => {
@@ -284,18 +291,13 @@ export class Game extends Scene {
                 if (i === gapIndex) {
                     continue
                 }
-                const wall = this.add.graphics() as Phaser.GameObjects.Graphics & {
-                    angle1: number
-                    angle2: number
-                    outerRadius: number
-                    innerRadius: number
-                    groupId: number
-                }
+                const wall = this.add.graphics() as Wall
                 wall.angle1 = (i / sides) * Math.PI * 2
                 wall.angle2 = ((i + 1) / sides) * Math.PI * 2
                 wall.outerRadius = initialDistance
                 wall.innerRadius = initialDistance - wallThickness
                 wall.groupId = groupId
+                wall.wallSpeed = 0.02
                 this.worldContainer.add(wall)
                 this.walls.add(wall)
             }
@@ -303,18 +305,13 @@ export class Game extends Scene {
             const start = Phaser.Math.Between(0, sides - 1)
             for (let j = 0; j < 3; j++) {
                 const i = (start + j * 2) % sides
-                const wall = this.add.graphics() as Phaser.GameObjects.Graphics & {
-                    angle1: number
-                    angle2: number
-                    outerRadius: number
-                    innerRadius: number
-                    groupId: number
-                }
+                const wall = this.add.graphics() as Wall
                 wall.angle1 = (i / sides) * Math.PI * 2
                 wall.angle2 = ((i + 1) / sides) * Math.PI * 2
                 wall.outerRadius = initialDistance
                 wall.innerRadius = initialDistance - wallThickness
                 wall.groupId = groupId
+                wall.wallSpeed = 0.02
                 this.worldContainer.add(wall)
                 this.walls.add(wall)
             }
@@ -326,18 +323,13 @@ export class Game extends Scene {
             for (let k = 0; k < segments; k++) {
                 const angleIndex = (startAngleIndex + direction * k + sides) % sides
                 const radius = initialDistance + k * offset
-                const wall = this.add.graphics() as Phaser.GameObjects.Graphics & {
-                    angle1: number
-                    angle2: number
-                    outerRadius: number
-                    innerRadius: number
-                    groupId: number
-                }
+                const wall = this.add.graphics() as Wall
                 wall.angle1 = (angleIndex / sides) * Math.PI * 2
                 wall.angle2 = ((angleIndex + 1) / sides) * Math.PI * 2
                 wall.outerRadius = radius
                 wall.innerRadius = radius - wallThickness
                 wall.groupId = groupId + k
+                wall.wallSpeed = 0.04
                 this.worldContainer.add(wall)
                 this.walls.add(wall)
             }
