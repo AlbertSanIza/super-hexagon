@@ -126,7 +126,7 @@ export class Game extends Scene {
     }
 
     update(time: number, delta: number) {
-        this.worldContainer.rotation += (this.baseRotationSpeed + this.score * 0.0001) * this.rotationDirection
+        this.worldContainer.rotation += (this.baseRotationSpeed + this.score * 0.00001) * this.rotationDirection
         if (this.gameState === 'playing') {
             this.updateGameplay(time, delta)
         } else if (this.gameState === 'menu') {
@@ -144,7 +144,7 @@ export class Game extends Scene {
         }
         if (this.time.now >= this.nextSpawnTime) {
             this.spawnWalls()
-            const currentDelay = this.baseSpawnDelay - this.score * 10
+            const currentDelay = this.baseSpawnDelay - this.score * 3
             this.nextSpawnTime = this.time.now + Math.max(200, currentDelay)
         }
         let hit = false
@@ -181,7 +181,7 @@ export class Game extends Scene {
                 return
             }
             const refWall = groupWalls[0]
-            const wallMoveSpeed = Math.max(3 + this.score * groupWalls[0].wallSpeed, 4)
+            const wallMoveSpeed = Math.max(3 + this.score * groupWalls[0].wallSpeed, 3.2)
             refWall.outerRadius -= wallMoveSpeed
             refWall.innerRadius -= wallMoveSpeed
             groupWalls.forEach((wallPoly) => {
@@ -316,8 +316,8 @@ export class Game extends Scene {
                 this.walls.add(wall)
             }
         } else if (wallType === 'snake') {
-            const offset = 24
-            const segments = 8
+            const offset = 28
+            const segments = 7
             const direction = Phaser.Math.Between(0, 1) === 0 ? 1 : -1
             const startAngleIndex = Phaser.Math.Between(0, sides - 1)
             for (let k = 0; k < segments; k++) {
@@ -329,7 +329,7 @@ export class Game extends Scene {
                 wall.outerRadius = radius
                 wall.innerRadius = radius - wallThickness
                 wall.groupId = groupId + k
-                wall.wallSpeed = 0.04
+                wall.wallSpeed = 0.03
                 this.worldContainer.add(wall)
                 this.walls.add(wall)
             }
