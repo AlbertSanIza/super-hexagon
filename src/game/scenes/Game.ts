@@ -5,6 +5,7 @@ const outerRadius = 800
 
 export class Game extends Scene {
     private center!: Phaser.Geom.Point
+    private prevWallType: string | null = null
     private worldContainer!: Phaser.GameObjects.Container
     private perspectiveContainer!: Phaser.GameObjects.Container
     private player!: Phaser.GameObjects.Triangle
@@ -267,8 +268,12 @@ export class Game extends Scene {
         const wallThickness = 26
         const groupId = Date.now()
         const initialDistance = 800
-        const wallTypes = ['pentagon', 'holes']
+        let wallTypes = ['pentagon', 'holes', 'snake']
+        if (this.prevWallType === 'snake') {
+            wallTypes = ['pentagon', 'holes']
+        }
         const wallType = wallTypes[Phaser.Math.Between(0, wallTypes.length - 1)]
+        this.prevWallType = wallType
         if (wallType === 'pentagon') {
             let gapIndex: number
             do {
@@ -310,6 +315,29 @@ export class Game extends Scene {
                 wall.outerRadius = initialDistance
                 wall.innerRadius = initialDistance - wallThickness
                 wall.groupId = groupId
+                this.worldContainer.add(wall)
+                this.walls.add(wall)
+            }
+        } else if (wallType === 'snake') {
+            const offset = 24
+            const segments = 8
+            const direction = Phaser.Math.Between(0, 1) === 0 ? 1 : -1
+            const startAngleIndex = Phaser.Math.Between(0, sides - 1)
+            for (let k = 0; k < segments; k++) {
+                const angleIndex = (startAngleIndex + direction * k + sides) % sides
+                const radius = initialDistance + k * offset
+                const wall = this.add.graphics() as Phaser.GameObjects.Graphics & {
+                    angle1: number
+                    angle2: number
+                    outerRadius: number
+                    innerRadius: number
+                    groupId: number
+                }
+                wall.angle1 = (angleIndex / sides) * Math.PI * 2
+                wall.angle2 = ((angleIndex + 1) / sides) * Math.PI * 2
+                wall.outerRadius = radius
+                wall.innerRadius = radius - wallThickness
+                wall.groupId = groupId + k
                 this.worldContainer.add(wall)
                 this.walls.add(wall)
             }
