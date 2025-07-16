@@ -267,29 +267,52 @@ export class Game extends Scene {
         const wallThickness = 26
         const groupId = Date.now()
         const initialDistance = 800
-        let gapIndex: number
-        do {
-            gapIndex = Phaser.Math.Between(0, sides - 1)
-        } while (gapIndex === this.prevGapIndex)
-        this.prevGapIndex = gapIndex
-        for (let i = 0; i < sides; i++) {
-            if (i === gapIndex) {
-                continue
+        const wallTypes = ['pentagon', 'holes']
+        const wallType = wallTypes[Phaser.Math.Between(0, wallTypes.length - 1)]
+        if (wallType === 'pentagon') {
+            let gapIndex: number
+            do {
+                gapIndex = Phaser.Math.Between(0, sides - 1)
+            } while (gapIndex === this.prevGapIndex)
+            this.prevGapIndex = gapIndex
+            for (let i = 0; i < sides; i++) {
+                if (i === gapIndex) {
+                    continue
+                }
+                const wall = this.add.graphics() as Phaser.GameObjects.Graphics & {
+                    angle1: number
+                    angle2: number
+                    outerRadius: number
+                    innerRadius: number
+                    groupId: number
+                }
+                wall.angle1 = (i / sides) * Math.PI * 2
+                wall.angle2 = ((i + 1) / sides) * Math.PI * 2
+                wall.outerRadius = initialDistance
+                wall.innerRadius = initialDistance - wallThickness
+                wall.groupId = groupId
+                this.worldContainer.add(wall)
+                this.walls.add(wall)
             }
-            const wall = this.add.graphics() as Phaser.GameObjects.Graphics & {
-                angle1: number
-                angle2: number
-                outerRadius: number
-                innerRadius: number
-                groupId: number
+        } else if (wallType === 'holes') {
+            const start = Phaser.Math.Between(0, sides - 1)
+            for (let j = 0; j < 3; j++) {
+                const i = (start + j * 2) % sides
+                const wall = this.add.graphics() as Phaser.GameObjects.Graphics & {
+                    angle1: number
+                    angle2: number
+                    outerRadius: number
+                    innerRadius: number
+                    groupId: number
+                }
+                wall.angle1 = (i / sides) * Math.PI * 2
+                wall.angle2 = ((i + 1) / sides) * Math.PI * 2
+                wall.outerRadius = initialDistance
+                wall.innerRadius = initialDistance - wallThickness
+                wall.groupId = groupId
+                this.worldContainer.add(wall)
+                this.walls.add(wall)
             }
-            wall.angle1 = (i / sides) * Math.PI * 2
-            wall.angle2 = ((i + 1) / sides) * Math.PI * 2
-            wall.outerRadius = initialDistance
-            wall.innerRadius = initialDistance - wallThickness
-            wall.groupId = groupId
-            this.worldContainer.add(wall)
-            this.walls.add(wall)
         }
         this.worldContainer.bringToTop(this.centerHexagon)
     }
