@@ -3,16 +3,15 @@ import { AUTO, Game } from 'phaser'
 
 import { Game as MainGame } from '@/game/scenes/Game'
 import { Menu } from '@/game/scenes/Menu'
+import { Score } from '@/game/scenes/Score'
 
-// Find out more information about the Game Config at:
-// https://docs.phaser.io/api-documentation/typedef/types-core#gameconfig
 const config: Types.Core.GameConfig = {
     type: AUTO,
     width: 1024,
     height: 768,
-    scene: [MainGame, Menu],
     parent: 'game-container',
     backgroundColor: '#682207',
+    scene: [MainGame, Menu, Score],
     physics: { default: 'arcade', arcade: { debug: false } }
 }
 
