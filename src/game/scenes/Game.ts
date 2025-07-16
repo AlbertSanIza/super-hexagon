@@ -214,7 +214,6 @@ export class Game extends Scene {
 
     private startGame() {
         this.gameState = 'transitioning'
-
         this.tweens.add({
             duration: 800,
             zoom: this.gameZoom,
