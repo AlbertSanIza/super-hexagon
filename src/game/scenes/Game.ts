@@ -1,5 +1,8 @@
 import { Scene } from 'phaser'
 
+const hexagonRadius = 40
+const outerRadius = 800
+
 export class Game extends Scene {
     private center!: Phaser.Geom.Point
     private worldContainer!: Phaser.GameObjects.Container
@@ -10,6 +13,8 @@ export class Game extends Scene {
     private playerDistance = 58
     private scoreText!: Phaser.GameObjects.Text
     private score = 0
+    private bestScore = 0
+
     private baseRotationSpeed = 0.009
     private rotationDirection = 1
     private timeSinceLastDirectionChange = 0
@@ -39,14 +44,13 @@ export class Game extends Scene {
 
     create() {
         this.center = new Phaser.Geom.Point(this.scale.width / 2, this.scale.height / 2)
-        this.perspectiveContainer = this.add.container(this.center.x, this.center.y)
         this.worldContainer = this.add.container(0, 0)
+        this.perspectiveContainer = this.add.container(this.center.x, this.center.y)
         this.perspectiveContainer.add(this.worldContainer)
         this.cameras.main.setZoom(this.menuZoom)
         this.perspectiveContainer.setScale(1, 0.8)
+        this.bestScore = parseFloat(localStorage.getItem('super-hexagon') || '0')
 
-        const hexagonRadius = 40
-        const outerRadius = 800
         for (let i = 0; i < 6; i++) {
             if (i % 2 === 0) {
                 const g = this.add.graphics()
@@ -94,18 +98,8 @@ export class Game extends Scene {
         this.centerHexagon.fillPath()
         this.centerHexagon.strokePath()
         this.worldContainer.add(this.centerHexagon)
-
         this.walls = this.add.group()
         this.physics.add.collider(this.player, this.walls, () => this.gameOver())
-
-        const scoreBackgroundWidth = 160
-        const scoreBackgroundHeight = 52
-        const scoreBackground = this.add.graphics()
-        scoreBackground.fillStyle(0x000000)
-        scoreBackground.fillRect(this.scale.width - scoreBackgroundWidth, 0, scoreBackgroundWidth, scoreBackgroundHeight)
-        scoreBackground.setScrollFactor(0)
-        scoreBackground.setVisible(false)
-        scoreBackground.setData('isScoreUI', true)
 
         const timeLabel = this.add.text(this.scale.width - 220, 6, 'TIME', { fontSize: '22px', fontStyle: 'bold', fontFamily: 'monospace' })
         timeLabel.setVisible(false)
@@ -174,17 +168,13 @@ export class Game extends Scene {
             this.wallGroups.get(wallPoly.groupId)!.push(wallPoly)
         })
 
-        // Update walls by group
         this.wallGroups.forEach((groupWalls) => {
             if (groupWalls.length === 0) {
                 return
             }
-            // Use first wall as reference for the group
             const refWall = groupWalls[0]
             refWall.outerRadius -= wallMoveSpeed
             refWall.innerRadius -= wallMoveSpeed
-
-            // Sync all other walls in group to reference wall
             groupWalls.forEach((wallPoly) => {
                 wallPoly.outerRadius = refWall.outerRadius
                 wallPoly.innerRadius = refWall.innerRadius
@@ -205,7 +195,6 @@ export class Game extends Scene {
                 }
             })
         })
-
         this.centerHexagon.setScale(scale)
         if (hit) {
             this.gameOver()
@@ -215,7 +204,7 @@ export class Game extends Scene {
     private startGame() {
         this.gameState = 'transitioning'
         this.tweens.add({
-            duration: 800,
+            duration: 400,
             zoom: this.gameZoom,
             ease: 'Power2.easeOut',
             targets: this.cameras.main,
@@ -226,24 +215,25 @@ export class Game extends Scene {
                 this.player.setAlpha(0)
                 this.tweens.add({ targets: this.player, alpha: 1, duration: 300, ease: 'Power2.easeOut' })
                 this.scoreText.setVisible(true)
-
                 this.children.getAll().forEach((child) => {
                     const gameObject = child as Phaser.GameObjects.GameObject & { getData?: (key: string) => boolean; setVisible?: (visible: boolean) => void }
                     if (gameObject.getData?.('isScoreUI') && gameObject.setVisible) {
                         gameObject.setVisible(true)
                     }
                 })
-
                 this.score = 0
             }
         })
     }
 
     private gameOver() {
+        if (this.score > this.bestScore) {
+            this.bestScore = this.score
+            this.game.events.emit('updateScore', this.bestScore.toFixed(2))
+        }
         this.gameState = 'transitioning'
         this.cameras.main.shake(80, 0.02)
         this.cameras.main.flash(10, 255, 255, 255, false)
-
         this.scoreText.setVisible(false)
         this.children.getAll().forEach((child) => {
             const gameObject = child as Phaser.GameObjects.GameObject & {
