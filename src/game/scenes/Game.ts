@@ -21,6 +21,7 @@ export class Game extends Scene {
     private nextDirectionChangeTime = Phaser.Math.Between(10, 20)
     private baseSpawnDelay = 1000
     private nextSpawnTime = 0
+    private prevGapIndex: number | null = null
 
     private walls!: Phaser.GameObjects.Group
     private cursors!: Phaser.Types.Input.Keyboard.CursorKeys
@@ -266,7 +267,11 @@ export class Game extends Scene {
         const wallThickness = 26
         const groupId = Date.now()
         const initialDistance = 800
-        const gapIndex = Phaser.Math.Between(0, sides - 1)
+        let gapIndex: number
+        do {
+            gapIndex = Phaser.Math.Between(0, sides - 1)
+        } while (gapIndex === this.prevGapIndex)
+        this.prevGapIndex = gapIndex
         for (let i = 0; i < sides; i++) {
             if (i === gapIndex) {
                 continue
