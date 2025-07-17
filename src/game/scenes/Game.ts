@@ -1,4 +1,5 @@
 import { Scene } from 'phaser'
+import { loadBestScore, saveBestScore } from '../../lib/score-storage'
 
 const hexagonRadius = 40
 const outerRadius = 800
@@ -59,7 +60,9 @@ export class Game extends Scene {
         this.perspectiveContainer.add(this.worldContainer)
         this.cameras.main.setZoom(this.menuZoom)
         this.perspectiveContainer.setScale(1, 0.8)
-        this.bestScore = parseFloat(localStorage.getItem('super-hexagon') || '0')
+        loadBestScore().then((score) => {
+            this.bestScore = score
+        })
 
         for (let i = 0; i < 6; i++) {
             if (i % 2 === 0) {
@@ -243,6 +246,7 @@ export class Game extends Scene {
         if (this.score > this.bestScore) {
             this.bestScore = this.score
             this.game.events.emit('updateScore', this.bestScore.toFixed(2))
+            saveBestScore(this.bestScore)
         }
         this.gameState = 'transitioning'
         this.cameras.main.shake(80, 0.02)
