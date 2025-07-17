@@ -267,6 +267,10 @@ export class Game extends Scene {
             ease: 'Power2.easeIn',
             targets: this.cameras.main,
             onComplete: () => {
+                const MenuScene = this.scene.get('Menu').constructor as { lastScore?: number }
+                if (MenuScene && typeof MenuScene.lastScore !== 'undefined') {
+                    MenuScene.lastScore = this.score
+                }
                 this.gameState = 'menu'
                 this.walls.clear(true, true)
                 this.player.setVisible(false)

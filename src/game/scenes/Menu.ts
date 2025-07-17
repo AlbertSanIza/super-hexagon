@@ -1,6 +1,7 @@
 import { Scene } from 'phaser'
 
 export class Menu extends Scene {
+    static lastScore: number | null = null
     private menuContainer!: Phaser.GameObjects.Container
 
     constructor() {
@@ -41,7 +42,9 @@ export class Menu extends Scene {
             scaleX: { from: 1, to: 1.1 },
             scaleY: { from: 1, to: 1.1 }
         })
-
+        if (Menu.lastScore !== null) {
+            this.add.text(centerX, centerY + 60, `LAST TIME: ${Menu.lastScore.toFixed(2)}`, { fontSize: '22px' }).setOrigin(0.5)
+        }
         const startText = this.add
             .text(centerX, this.cameras.main.height - 40, 'CLICK ANYWHERE TO START', { fontSize: '18px', color: '#FFFFFF', fontFamily: 'Arial' })
             .setOrigin(0.5)
