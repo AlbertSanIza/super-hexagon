@@ -89,14 +89,6 @@ src/
 └── main.tsx             # Application entry point
 ```
 
-## Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request. For major changes, please open an issue first to discuss what you would like to change.
-
-## License
-
-This project is open source and available under the [MIT License](LICENSE).
-
 ## Acknowledgments
 
 - Inspired by the original [Super Hexagon](https://superhexagon.com/) by Terry Cavanagh
